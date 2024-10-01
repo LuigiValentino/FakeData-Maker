@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FakeData Maker</title>
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+        body {
+            background: #f3f4f6;
+            font-family: 'Inter', sans-serif;
+        }
+        .tab {
+            padding: 0.75rem 1.5rem;
+            border-bottom: 2px solid transparent;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .tab:hover {
+            color: #2563eb;
+        }
+        .tab-active {
+            color: #2563eb;
+            border-color: #2563eb;
+        }
+        .form-section {
+            border: 1px solid #e5e7eb;
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+            background: #ffffff;
+            margin-bottom: 1.5rem;
+            transition: transform 0.3s ease-in-out;
+        }
+        .form-section h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: #374151;
+            display: flex;
+            align-items: center;
+        }
+        .form-section h3 i {
+            margin-right: 0.5rem;
+            color: #2563eb;
+        }
+        .form-section label {
+            font-size: 1rem;
+            color: #4b5563;
+        }
+        .btn-submit {
+            background-color: #2563eb;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+        .btn-submit:hover {
+            background-color: #1d4ed8;
+            transform: translateY(-2px);
+        }
+        .result-box {
+            background-color: #f9fafb;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            border: 1px solid #e5e7eb;
+        }
+        .footer {
+            margin-top: 2rem;
+            text-align: center;
+            padding: 1.5rem 0;
+            color: rgb(34, 34, 34);
+            font-size: 0.9rem;
+        }
+        .footer a {
+            color: rgb(34, 34, 34);
+            margin-left: 1rem;
+            transition: color 0.3s ease;
+        }
+        .footer a:hover {
+            color: rgb(34, 34, 34);
+        }
+        .info-message {
+            background-color: #f9fafb;
+            border: 1px solid #e5e7eb;
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+            text-align: center;
+            color: #374151;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-center items-center">
+
+    <div class="container mx-auto mt-10 p-8 bg-white shadow-lg rounded-lg max-w-3xl">
+        <h1 class="text-4xl font-bold text-center mb-8 text-blue-700">FakeData Maker</h1>
+
+        <div class="info-message">
+            <p><strong>Nota:</strong> Toda la información generada es completamente falsa. Usa estos datos con discreción.</p>
+        </div>
+
+        <div class="flex justify-center space-x-4 mb-8">
+            <a href="/" class="tab {% if tab == 'basic' %}tab-active{% endif %}">Básico</a>
+            <a href="/advanced" class="tab {% if tab == 'advanced' %}tab-active{% endif %}">Avanzado</a>
+        </div>
+
+        {% if tab == 'basic' %}
+        <form id="basic-form" method="POST" action="/" class="space-y-6">
+            <div class="form-section">
+                <h3><i class="fas fa-cog"></i> Configuración</h3>
+                <label for="count" class="block text-lg font-semibold mb-2">Número de registros (máx 5):</label>
+                <input type="number" name="count" id="count" min="1" max="5" value="1" class="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+            </div>
+
+            <div class="form-section">
+                <h3><i class="fas fa-check-circle"></i> Selecciona los campos</h3>
+                <div class="grid grid-cols-2 gap-4 mt-4">
+                    <label><input type="checkbox" name="fields" value="name" class="mr-2"> Nombre</label>
+                    <label><input type="checkbox" name="fields" value="email" class="mr-2"> Email</label>
+                    <label><input type="checkbox" name="fields" value="address" class="mr-2"> Dirección</label>
+                    <label><input type="checkbox" name="fields" value="company" class="mr-2"> Empresa</label>
+                    <label><input type="checkbox" name="fields" value="job" class="mr-2"> Trabajo</label>
+                    <label><input type="checkbox" name="fields" value="city" class="mr-2"> Ciudad</label>
+                    <label><input type="checkbox" name="fields" value="country" class="mr-2"> País</label>
+                    <label><input type="checkbox" name="fields" value="postcode" class="mr-2"> Código Postal</label>
+                    <label><input type="checkbox" name="fields" value="latitude" class="mr-2"> Latitud</label>
+                    <label><input type="checkbox" name="fields" value="longitude" class="mr-2"> Longitud</label>
+                </div>
+                <div class="mt-4">
+                    <label class="inline-flex items-center">
+                        <input type="checkbox" id="select-all" class="mr-2"> Seleccionar todos
+                    </label>
+                </div>
+            </div>
+
+            <div class="text-center">
+                <button type="submit" class="btn-submit focus:outline-none">Generar Datos</button>
+            </div>
+        </form>
+        {% endif %}
+
+        {% if tab == 'advanced' %}
+        <form id="advanced-form" method="POST" action="/advanced" class="space-y-6">
+            <div class="form-section">
+                <h3><i class="fas fa-cog"></i> Configuración</h3>
+                <label for="count" class="block text-lg font-semibold mb-2">Número de registros (máx 5):</label>
+                <input type="number" name="count" id="count" min="1" max="5" value="1" class="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+            </div>
+
+            <div class="form-section">
+                <h3><i class="fas fa-user"></i> Información Personal</h3>
+                <div class="grid grid-cols-2 gap-4 mt-4">
+                    <label><input type="checkbox" name="fields" value="name" class="mr-2"> Nombre</label>
+                    <label><input type="checkbox" name="fields" value="dob" class="mr-2"> Fecha de Nacimiento</label>
+                    <label><input type="checkbox" name="fields" value="phone" class="mr-2"> Número de Teléfono</label>
+                    <label><input type="checkbox" name="fields" value="ssn" class="mr-2"> SSN</label>
+                    <label><input type="checkbox" name="fields" value="gender" class="mr-2"> Género</label>
+                    <label><input type="checkbox" name="fields" value="username" class="mr-2"> Nombre de Usuario</label>
+                    <label><input type="checkbox" name="fields" value="ipv4" class="mr-2"> IPv4</label>
+                    <label><input type="checkbox" name="fields" value="mac_address" class="mr-2"> MAC Address</label>
+                    <label><input type="checkbox" name="fields" value="domain_name" class="mr-2"> Dominio</label>
+                    <label><input type="checkbox" name="fields" value="url" class="mr-2"> URL</label>
+                    <label><input type="checkbox" name="fields" value="credit_card" class="mr-2"> Tarjeta de Crédito</label>
+                    <label><input type="checkbox" name="fields" value="credit_card_expiry" class="mr-2"> Expiración Tarjeta</label>
+                    <label><input type="checkbox" name="fields" value="credit_card_cvv" class="mr-2"> CVV</label>
+                    <label><input type="checkbox" name="fields" value="iban" class="mr-2"> IBAN</label>
+                    <label><input type="checkbox" name="fields" value="currency" class="mr-2"> Moneda</label>
+                    <label><input type="checkbox" name="fields" value="catch_phrase" class="mr-2"> Slogan</label>
+                    <label><input type="checkbox" name="fields" value="company_phone" class="mr-2"> Teléfono de Empresa</label>
+                    <label><input type="checkbox" name="fields" value="company_email" class="mr-2"> Email de Empresa</label>
+                    <label><input type="checkbox" name="fields" value="product_name" class="mr-2"> Producto</label>
+                    <label><input type="checkbox" name="fields" value="barcode_ean13" class="mr-2"> Código de Barras (EAN-13)</label>
+                    <label><input type="checkbox" name="fields" value="color" class="mr-2"> Color</label>
+                    <label><input type="checkbox" name="fields" value="sentence" class="mr-2"> Frase</label>
+                    <label><input type="checkbox" name="fields" value="text" class="mr-2"> Texto</label>
+                    <label><input type="checkbox" name="fields" value="paragraph" class="mr-2"> Párrafo</label>
+                    <label><input type="checkbox" name="fields" value="license_plate" class="mr-2"> Placa</label>
+                    <label><input type="checkbox" name="fields" value="vin" class="mr-2"> VIN</label>
+                    <label><input type="checkbox" name="fields" value="date_time" class="mr-2"> Fecha y Hora</label>
+                    <label><input type="checkbox" name="fields" value="month" class="mr-2"> Mes</label>
+                    <label><input type="checkbox" name="fields" value="day_of_month" class="mr-2"> Día del Mes</label>
+                    <label><input type="checkbox" name="fields" value="day_of_week" class="mr-2"> Día de la Semana</label>
+                    <label><input type="checkbox" name="fields" value="uuid" class="mr-2"> UUID</label>
+                    <label><input type="checkbox" name="fields" value="sha256" class="mr-2"> SHA256</label>
+                    <label><input type="checkbox" name="fields" value="color_name" class="mr-2"> Nombre del Color</label>
+                    <label><input type="checkbox" name="fields" value="language_name" class="mr-2"> Idioma</label>
+                    <label><input type="checkbox" name="fields" value="twitter_profile" class="mr-2"> Twitter</label>
+                    <label><input type="checkbox" name="fields" value="linkedin_url" class="mr-2"> LinkedIn</label>
+                    <label><input type="checkbox" name="fields" value="instagram_username" class="mr-2"> Instagram</label>
+                </div>
+            </div>
+
+            <div class="mt-4">
+                <label class="inline-flex items-center">
+                    <input type="checkbox" id="select-all" class="mr-2"> Seleccionar todos
+                </label>
+            </div>
+
+            <div class="text-center">
+                <button type="submit" class="btn-submit focus:outline-none">Generar Datos</button>
+            </div>
+        </form>
+        {% endif %}
+
+        {% if data %}
+        <div class="mt-6 result-box">
+            <h2 class="text-2xl font-semibold mb-4">Datos Generados</h2>
+            <div class="space-y-4">
+                {% for record in data %}
+                <div class="bg-gray-100 p-4 rounded-lg shadow-md">
+                    <ul>
+                        {% for key, value in record.items() %}
+                        <li><strong>{{ key.capitalize() }}:</strong> {{ value }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+    </div>
+
+    <footer class="footer">
+        <p>&copy; 2024 <a href="luigiadducci.netlify.app">Luigi Adducci</a></p>
+    </footer>
+
+    <script>
+        document.getElementById('select-all').addEventListener('change', function(event) {
+            const checkboxes = document.querySelectorAll('input[name="fields"]');
+            checkboxes.forEach(checkbox => checkbox.checked = event.target.checked);
+        });
+
+        const Toast = Swal.mixin({
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+                toast.onmouseenter = Swal.stopTimer;
+                toast.onmouseleave = Swal.resumeTimer;
+            }
+        });
+
+        document.getElementById('basic-form')?.addEventListener('submit', function(event) {
+            const checkboxes = document.querySelectorAll('input[name="fields"]:checked');
+            if (checkboxes.length === 0) {
+                event.preventDefault();
+                Toast.fire({
+                    icon: 'error',
+                    title: 'Debe seleccionar al menos un campo.'
+                });
+            }
+        });
+
+        document.getElementById('advanced-form')?.addEventListener('submit', function(event) {
+            const checkboxes = document.querySelectorAll('input[name="fields"]:checked');
+            if (checkboxes.length === 0) {
+                event.preventDefault();
+                Toast.fire({
+                    icon: 'error',
+                    title: 'Debe seleccionar al menos un campo.'
+                });
+            }
+        });
+    </script>
+</body>
+</html>
